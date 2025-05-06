@@ -1,5 +1,5 @@
 // Function that runs once the window is fully loaded
-window.onload = function() {
+window.onload = function () {
     // Attempt to retrieve the API base URL from the local storage
     var savedBaseUrl = localStorage.getItem('apiBaseUrl');
     // If a base URL is found in local storage, load the posts
@@ -45,15 +45,15 @@ function addPost() {
     // Use the Fetch API to send a POST request to the /posts endpoint
     fetch(baseUrl + '/posts', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: postTitle, content: postContent })
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({title: postTitle, content: postContent})
     })
-    .then(response => response.json())  // Parse the JSON data from the response
-    .then(post => {
-        console.log('Post added:', post);
-        loadPosts(); // Reload the posts after adding a new one
-    })
-    .catch(error => console.error('Error:', error));  // If an error occurs, log it to the console
+        .then(response => response.json())  // Parse the JSON data from the response
+        .then(post => {
+            console.log('Post added:', post);
+            loadPosts(); // Reload the posts after adding a new one
+        })
+        .catch(error => console.error('Error:', error));  // If an error occurs, log it to the console
 }
 
 // Function to send a DELETE request to the API to delete a post
@@ -64,9 +64,9 @@ function deletePost(postId) {
     fetch(baseUrl + '/posts/' + postId, {
         method: 'DELETE'
     })
-    .then(response => {
-        console.log('Post deleted:', postId);
-        loadPosts(); // Reload the posts after deleting one
-    })
-    .catch(error => console.error('Error:', error));  // If an error occurs, log it to the console
+        .then(response => {
+            console.log('Post deleted:', postId);
+            loadPosts(); // Reload the posts after deleting one
+        })
+        .catch(error => console.error('Error:', error));  // If an error occurs, log it to the console
 }

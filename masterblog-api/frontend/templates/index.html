@@ -2,28 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Blog Posts</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="static/styles.css">
+    <link href="static/styles.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>📚 Blog Posts</h1>
-        <div class="input-field">
-            <input type="text" id="api-base-url" placeholder="Enter API Base URL" value="http://127.0.0.1:5002/api">
-            <button onclick="loadPosts()">Load Posts</button>
-        </div>
-        <div class="input-field">
-            <input type="text" id="post-title" placeholder="Enter Post Title">
-            <input type="text" id="post-content" placeholder="Enter Post Content">
-            <button onclick="addPost()">Add Post</button>
-        </div>
-        <div id="post-container">
-            <!-- Blog posts will be inserted here by JavaScript -->
-        </div>
+<div class="container">
+    <h1>📚 Blog Posts</h1>
+    <div class="input-field">
+        <input id="api-base-url" placeholder="Enter API Base URL" type="text" value="http://127.0.0.1:5002/api">
+        <button onclick="loadPosts()">Load Posts</button>
     </div>
+    <div class="input-field">
+        <input id="post-title" placeholder="Enter Post Title" type="text">
+        <input id="post-content" placeholder="Enter Post Content" type="text">
+        <button onclick="addPost()">Add Post</button>
+    </div>
+    <div id="post-container">
+        <!-- Blog posts will be inserted here by JavaScript -->
+    </div>
+</div>
 
-    <script src="static/main.js"></script>
+<script src="static/main.js"></script>
 </body>
 </html>
