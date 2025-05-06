@@ -18,12 +18,16 @@ swagger_ui_blueprint = get_swaggerui_blueprint(
 app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 # ===swagger ends
 
-POSTS = [
-    {"id": 1, "title": "First post", "content": "This is the first post."},
-    {"id": 2, "title": "Second post", "content": "This is the second post."},
-]
+def create_data_store():
+    return {
+        "posts": [
+            {"id": 1, "title": "First post", "content": "This is the first post."},
+            {"id": 2, "title": "Second post", "content": "This is the second post."}
+        ],
+        "next_id": 3
+    }
 
-NEXT_ID = 3
+store = create_data_store()
 
 
 @app.route('/api/posts', methods=['GET'])
@@ -50,10 +54,10 @@ def get_posts():
             return jsonify({"error": "Invalid direction. Must be 'asc' or 'desc'."}), 400
 
         reverse = direction == 'desc'
-        sorted_posts = sorted(POSTS, key=lambda post: post[sort_field].lower(), reverse=reverse)
+        sorted_posts = sorted(store['posts'], key=lambda post: post[sort_field].lower(), reverse=reverse)
         return jsonify(sorted_posts), 200
 
-    return jsonify(POSTS), 200
+    return jsonify(store['posts']), 200
 
 
 @app.route('/api/posts', methods=['POST'])
@@ -68,7 +72,6 @@ def add_post():
         JSON of the newly created post with status code 201,
         or error message with status code 400 if required fields are missing.
     """
-    global NEXT_ID
     data = request.get_json()
     title = data.get('title')
     content = data.get('content')
@@ -82,13 +85,13 @@ def add_post():
         return jsonify({'error': f'Missing field(s): {", ".join(missing)}'}), 400
 
     new_post = {
-        'id': NEXT_ID,
+        'id': store['next_id'],
         'title': title,
         'content': content
     }
 
-    POSTS.append(new_post)
-    NEXT_ID += 1
+    store['posts'].append(new_post)
+    store['next_id'] += 1
 
     return jsonify(new_post), 201
 
@@ -105,10 +108,11 @@ def delete_post(post_id):
         JSON message confirming deletion with status code 200,
         or error message with status code 404 if post is not found.
     """
-    for post in POSTS:
+    for post in store['posts']:
         if post['id'] == post_id:
-            POSTS.remove(post)
-            return jsonify({"message": f"Post with id {post_id} has been deleted successfully."}), 200
+            store['posts'].remove(post)
+            return jsonify({"message": f"Post with id {post_id} "
+                                       f"has been deleted successfully."}), 200
 
     return jsonify({"error": f"Post with id {post_id} not found."}), 404
 
@@ -129,7 +133,7 @@ def update_post(post_id):
         or error message with status code 404 if post is not found.
     """
     data = request.get_json()
-    for post in POSTS:
+    for post in store['posts']:
         if post['id'] == post_id:
             post['title'] = data.get('title', post['title'])
             post['content'] = data.get('content', post['content'])
@@ -155,7 +159,7 @@ def search_posts():
 
     filtered_posts = []
 
-    for post in POSTS:
+    for post in store['posts']:
         matches_title = title_query and title_query.lower() in post['title'].lower()
         matches_content = content_query and content_query.lower() in post['content'].lower()
 
